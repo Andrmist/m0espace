@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Moe space{% endblock %}
+{% block content %}
+    <style>
+        .embed {
+            max-width: 100%;
+            {#display: block;#}
+            {#margin-right: auto;#}
+            {#margin-left: auto;#}
+            display: flex;
+            flex-direction: column;
+        }
+        #show {
+            line-height: 1.2;
+        }
+    </style>
+    <script>
+        window.onload = async () => {
+            const dateElement = document.querySelector("#uploaded");
+            dateElement.innerHTML = new Date("{{ file["date"].isoformat() }}Z").toLocaleString();
+            {#console.log("{{ file["date"].isoformat() }}")#}
+            if ("{{ file["mimetype"].split("/")[0] }}" === "text") {
+                const data = await (await fetch("/i/{{ file['id'] + file['ext'] }}")).text();
+                document.querySelector("#embed").textContent = data;
+            }
+        }
+    </script>
+    <p>Uploaded by {{ file["name"] }}</p>
+    <p>MIME type: {{ file["mimetype"] }}</p>
+    <p>Uploaded at <span class="date" id="uploaded"></span></p>
+    <div class="embed">
+        {% if file["mimetype"].split("/")[0] == "image" %}
+            <img src="/i/{{ file['id'] + file['ext'] }}" alt="Image uploaded by {{ file["name"] }}">
+            <br>
+            <a id="show" href="/i/{{ file['id'] + file['ext'] }}">Show full size</a>
+        {% elif file["mimetype"].split("/")[0] == "video" %}
+            <video controls>
+                <source src="/i/{{ file['id'] + file['ext'] }}"
+                        type="{{ file["mimetype"] }}">
+                Video embed is not supported. File link: {{ domain + '/i/' + file['id'] + file['ext'] }}
+            </video>
+            <br>
+            <a id="show" href="/i/{{ file['id'] + file['ext'] }}">Show full size</a>
+        {% elif file["mimetype"].split("/")[0] == "text" %}
+            <pre><code id="embed"></code></pre>
+            <br>
+            <a href="/i/{{ file['id'] + file['ext'] }}">View raw</a>
+        {% endif %}
+    </div>
+
+{% endblock %}

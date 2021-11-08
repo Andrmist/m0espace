@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Upload - Moe space{% endblock %}
+{% block content %}
+    <script>
+        function copy(text = "") {
+            const selection = window.getSelection();
+            const previousSelection = []; // Array where the previous selections are stored
+
+            for (let i = 0; i < selection.rangeCount; i++) {
+                // Loops over every selections and add them to the array
+                previousSelection[i] = selection.getRangeAt(i);
+            }
+
+            // Clear all the previous selections (we'll re-select them later)
+            selection.removeAllRanges();
+
+            const range = document.createRange(), // Our new selection that will contain the text to copy
+                selectionElement = document.createElement("span"); // The hidden element that will contain the text that will be selected
+
+            // Add the text to the element
+            selectionElement.innerText = text;
+
+            // Add CSS rules that should theorically prevent the hidden element from impacting the page layout in any way
+            selectionElement.setAttribute("style", `
+                position:absolute !important;
+                top:-9999vh !important;
+                opacity:0 !important;
+                height:0 !important;
+                width:0 !important;
+                pointer-events:none !important;
+                z-index:-9999 !important;
+            `);
+
+            // Add the element to the document (We hade to, in order to select it)
+            document.body.appendChild(selectionElement);
+
+            // Make the range select the entire content of the element
+            range.selectNodeContents(selectionElement);
+
+            // Add that range to the selection.
+            selection.addRange(range);
+
+            // Copy the selection to clipboard.
+            document.execCommand('copy');
+
+            // Clear the selection
+            selection.removeAllRanges();
+
+            // Remove the hidden element
+            document.body.removeChild(selectionElement);
+
+            for (let i = 0; i < previousSelection.length; i++) {
+                // Re-select everything that was selected
+                selection.addRange(previousSelection[i]);
+            }
+        }
+    </script>
+    <h1>Upload</h1>
+    <p>You can upload files using POST request:</p>
+    <pre><code>POST {{ domain }}
+file=[your file]
+token=[your token] (If empty, it generates a new one or uses any of those used from your ip)
+</code></pre>
+    <p>More about </p>
+    <p>Instead you can use this form below:</p>
+    <form enctype="multipart/form-data" class="upload" method="POST" action="{{ url_for("index_upload") }}">
+        {% if not user.is_logged %}
+            <p>Token: <input type="text" name="token" placeholder="Your token"></p>
+        {% else %}
+            <p>Your token is: <a class="spoiler" id="token" href="#token" onclick="copy('{{ user.token }}')" title="Click to reveal and copy">{{ user.token }}</a></p>
+            <input type="hidden" name="token" value="{{ user.token }}">
+        {% endif %}
+        <input type="hidden" name="html" value="1">
+        <p>File: <input type="file" name="file"></p>
+        <input type="submit">
+    </form>
+{% endblock %}

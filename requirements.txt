@@ -1,0 +1,4 @@
+Flask~=2.0.1
+Flask_Discord~=0.1.64
+mariadb~=1.1.1
+python_magic~=0.4.24

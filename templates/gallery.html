@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block title %}Moe space{% endblock %}
+{% block header %}
+    <style>
+        body {
+            {#height: 100%;#}
+            width: 100%;
+            margin: 0;
+            max-width: 100%;
+        }
+        nav, footer {
+            border-radius: 0;
+            height: 100%;
+        }
+        h2 {
+            line-height: 1.2;
+        }
+
+        {#.gallery {#}
+        {#    display: flex;#}
+        {#    flex-wrap: wrap;#}
+        {#    align-items: center;#}
+            {#justify-content: center;#}
+        {#    margin-left: auto;#}
+        {#    margin-right: auto;#}
+        {#}#}
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 320px);
+            grid-auto-rows: 320px;
+            {#grid-gap: 1rem;#}
+            grid-auto-flow: dense;
+        }
+
+        .gallery article {
+            display: flex;
+            margin: 10px;
+            {#align-items: center;#}
+            justify-content: center;
+        }
+
+        .gallery a {
+            display: flex;
+            {#margin: 10px;#}
+            {#max-width: 100%;#}
+            max-height: 100%;
+            object-fit: cover;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .gallery img {
+            {#object-fit: cover;#}
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .gallery img[media-type="video"], *[media-type="video"] {
+            border: 5px #966fd6 solid;
+        }
+
+        .gallery article[type="file"] {
+            border: 3px #7f566d solid;
+            border-radius: 5px;
+        }
+        .gallery article[type="file"] > a {
+            width: 100%;
+            display: flex;
+            text-decoration: none;
+            color: #202225;
+            justify-items: center;
+        }
+        .file {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .pagination {
+            margin-left: auto;
+            margin-right: auto;
+            display: inline-block;
+        }
+
+        .pagination a {
+            line-height: 1.2;
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+        .pagination a.active {
+            background-color: var(--color2);
+            color: white;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <script>
+        window.onload = async () => {
+            const dateElements = document.querySelectorAll(".gallery img");
+            const dateElements2 = document.querySelectorAll(".date");
+            for (const dateElement of dateElements) {
+                dateElement.setAttribute("title", new Date(dateElement.getAttribute("date")).toLocaleString());
+            }
+            for (const dateElement of dateElements2) {
+                dateElement.innerHTML = new Date(dateElement.getAttribute("date")).toLocaleString();
+            }
+        }
+    </script>
+    <h3>Change name</h3>
+    <form action="{{ url_for('change_name') }}" method="POST" class="upload">
+        <input type="hidden" name="token" value="{{ user.token }}">
+        <p>Current name: {{ user.name }}</p>
+        <label>New name:
+            <input name="name" type="text">
+        </label>
+        <p><input type="submit"></p>
+    </form>
+    <hr>
+    <h2>Media gallery</h2>
+    <code>Note: <span media-type="video">Bordered images</span> are videos</code>
+    <div class="gallery">
+        {% for file in files %}
+            <article type="{{ "file" if not (file["mime"].split("/")[0] == 'image' or file["mime"].split("/")[0] == 'video') else "media" }}">
+                <a href="{{ "/social/" + file["id"] + file["ext"] }}">
+                    {% if file["mime"].split("/")[0] == 'image' or file["mime"].split("/")[0] == 'video'%}
+                        <img src="{{ "/t/" + file["id"] + ".jpg" if file["mime"].split("/")[0] == 'video' else "/i/" + file["id"] + file["ext"] }}" date="{{ file["date"].isoformat() }}Z" alt="" media-type="{{ file["mime"].split("/")[0] }}">
+                    {% else %}
+                        <div class="file">
+                            <p>{{ file["id"] + file["ext"] }}</p>
+                            <p>{{ file["mime"] }}</p>
+                            <p class="date" date="{{ file["date"].isoformat() }}Z"></p>
+                        </div>
+                    {% endif %}
+                </a>
+            </article>
+        {% endfor %}
+    </div>
+    <style>
+        .center {
+            text-align: center;
+        }
+
+        .pagination {
+            display: inline-block;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            {#border: 1px solid #ddd;#}
+            margin: 0 4px;
+        }
+
+        .pagination a.active {
+            background-color: #966fd6;
+            color: white;
+            border: 1px solid #966fd6;
+        }
+
+        .pagination a:hover:not(.active) {background-color: #ddd;}
+    </style>
+    <div class="center">
+        <div class="pagination">
+            {% if not page == 1 %}
+                <a href="{{ url_for("gallery", page=page - 1) }}">&laquo;</a>
+            {% endif %}
+            {% for i in range(1, ceil(count / 10) + 1) %}
+                <a href="{{ url_for("gallery", page=i) }}" {% if page == i %} class="active" {% endif %}>{{ i }}</a>
+            {% endfor %}
+            {% if not page == ceil(count / 10) %}
+                <a href="{{ url_for("gallery", page=page + 1) }}">&raquo;</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

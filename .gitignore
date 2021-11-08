@@ -1,0 +1,10 @@
+uploads/*
+!uploads/.keep
+thumbnails/*
+!thumbnails/.keep
+.idea/*
+__pycache__/
+*.py[cod]
+*$py.class
+config.py
+m0espace.sock

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Login - Moe space{% endblock %}
+{% block content %}
+{% if user.is_logged %}
+    <script>
+        location.href = "{{ domain }}"
+    </script>
+    <noscript>You are logged in already! To logout, please visit {{ domain }}{{ url_for("logout") }}</noscript>
+{% else %}
+    <h1>Login</h1>
+    <p>You can login using discord account or enter your token:</p>
+    <ul class="login">
+        <li><a href="{{ url_for("discord_login") }}">Discord</a></li>
+        <li class="form-label"><strong>OR</strong></li>
+        <li>
+            <form name="token" action="{{ url_for("api_login") }}" method="POST">
+                <p><input class="form-control form-control-sm" type="text" name="token" placeholder="Your token"></p>
+                <input class="btn-mini btn" type="submit" value="Login Or register">
+            </form>
+        </li>
+{#        <li><strong>OR</strong></li>#}
+
+    </ul>
+{% endif %}
+{% endblock %}
