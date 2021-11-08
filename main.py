@@ -196,7 +196,15 @@ def social(path):
             "date": data[5],
             "mimetype": data[6]
         }
-        return render_template("social.html", domain=config.domain, file=file_info, user=User(session.get('token')))
+        app_info = {
+            "name": config.name,
+            "color": config.color
+        }
+        return render_template("social.html",
+                               domain=config.domain,
+                               file=file_info,
+                               app_info=app_info,
+                               user=User(session.get('token')))
     except FileNotFoundError:
         return "Not Found", 404
 

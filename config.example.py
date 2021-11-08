@@ -1,4 +1,6 @@
 domain = ""
+name = "M0e space"
+color = ""
 max_file_size = "1G"
 flask_secret = ""
 mariadb = {
