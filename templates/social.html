@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Moe space{% endblock %}
+{% block title %}{{ file["id"] + file["ext"] }}{% endblock %}
 {% block header %}
     <meta property="og:title" content="Uploaded by {{ file["name"] }} | {{ app_info["name"] }}" />
     <meta property="og:description" content="" />

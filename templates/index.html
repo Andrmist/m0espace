@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Moe space{% endblock %}
+{% block title %}Home{% endblock %}
 {#{% block header %}#}
 {#    #}
 {#{% endblock %}#}
 {% block content %}
-    <h1>Moe Space</h1>
-    <p>Moe space - simple and lightweight file hosting.</p>
+    <h1>{{ app_info["name"] }}</h1>
+    <p>{{ app_info["name"] }} - simple and lightweight file hosting.</p>
     <p>Max file size: {{ max_file_size }}</p>
     <p>More about uploading you can read <a href="{{ url_for("upload") }}">here</a>.</p>
 {% endblock %}

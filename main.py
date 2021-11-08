@@ -26,6 +26,11 @@ discord = DiscordOAuth2Session(app)
 
 mime = Magic(mime=True)
 
+app_info = {
+    "name": config.name,
+    "color": config.color
+}
+
 
 class User:
     def __init__(self, token):
@@ -97,7 +102,7 @@ def redirect_unauthorized(e):
 
 @app.route("/upload")
 def upload():
-    return render_template("upload.html", domain=config.domain, user=User(session.get('token')))
+    return render_template("upload.html", app_info=app_info, domain=config.domain, user=User(session.get('token')))
 
 
 @app.route('/i/<path:path>')
@@ -130,7 +135,7 @@ def change_name():
 
 @app.route("/login")
 def login():
-    return render_template("login.html", domain=config.domain, user=User(session.get('token')))
+    return render_template("login.html", app_info=app_info, domain=config.domain, user=User(session.get('token')))
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -172,7 +177,7 @@ def index_upload():
             return redirect(url_for("social", path=res))
         return f"{config.domain}/i/{res}"
     else:
-        return render_template("index.html", user=User(session.get("token")), max_file_size=config.max_file_size)
+        return render_template("index.html", app_info=app_info, user=User(session.get("token")), max_file_size=config.max_file_size)
 
 
 @app.route("/social/<path:path>")
@@ -195,10 +200,6 @@ def social(path):
             "ext": data[4],
             "date": data[5],
             "mimetype": data[6]
-        }
-        app_info = {
-            "name": config.name,
-            "color": config.color
         }
         return render_template("social.html",
                                domain=config.domain,
@@ -234,6 +235,7 @@ def gallery(page):
 
         return render_template(
             "gallery.html",
+            app_info=app_info,
             domain=config.domain,
             page=int(page),
             count=count[0],
