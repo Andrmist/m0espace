@@ -3,11 +3,11 @@
 {% block header %}
     <meta property="og:title" content="Uploaded by {{ file["name"] }} | {{ app_info["name"] }}" />
     <meta property="og:description" content="" />
-    <meta property="og:image" content="{{ domain + "/t/" + file["id"] + ".jpg" if file["mime"].split("/")[0] == 'video' else domain + "/i/" + file["id"] + file["ext"] }}"> <!-- include your hosted image full URL -->
+    <meta property="og:image" content="{{ domain + "/t/" + file["id"] + ".jpg" if file["mimetype"].split("/")[0] == 'video' else domain + "/i/" + file["id"] + file["ext"] }}"> <!-- include your hosted image full URL -->
     <meta property="og:url" content="{{ domain }}" />
     <meta name="twitter:title" content="Uploaded by {{ file["name"] }} | {{ app_info["name"] }}">
     <meta name="twitter:description" content="" />
-    <meta name="twitter:image" content="{{ domain + "/t/" + file["id"] + ".jpg" if file["mime"].split("/")[0] == 'video' else domain + "/i/" + file["id"] + file["ext"] }}" /> <!-- include your hosted image full URL -->
+    <meta name="twitter:image" content="{{ domain + "/t/" + file["id"] + ".jpg" if file["mimetype"].split("/")[0] == 'video' else domain + "/i/" + file["id"] + file["ext"] }}" /> <!-- include your hosted image full URL -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="{{ app_info["color"] }}">
     <script type="application/json+oembed">{"type":"link","version":"1.0","author_name":"{{ app_info["name"] }}","author_url":"{{ domain }}"}</script>
