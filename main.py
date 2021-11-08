@@ -175,7 +175,10 @@ def index_upload():
                         mime.from_file(os.path.join("uploads", res))))
         if 'html' in request.form and request.form["html"] == "1":
             return redirect(url_for("social", path=res))
-        return f"{config.domain}/i/{res}"
+        if 'social' in request.form and request.form["social"] == "y":
+            return f"{config.domain}/social/{res}"
+        else:
+            return f"{config.domain}/i/{res}"
     else:
         return render_template("index.html", app_info=app_info, user=User(session.get("token")), max_file_size=config.max_file_size)
 

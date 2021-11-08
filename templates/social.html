@@ -10,7 +10,7 @@
     <meta name="twitter:image" content="{{ domain + "/t/" + file["id"] + ".jpg" if file["mimetype"].split("/")[0] == 'video' else domain + "/i/" + file["id"] + file["ext"] }}" /> <!-- include your hosted image full URL -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="{{ app_info["color"] }}">
-    <script type="application/json+oembed">{"type":"link","version":"1.0","author_name":"{{ app_info["name"] }}","author_url":"{{ domain }}"}</script>
+    <script type="application/json+oembed">{"type":"link","version":"1.0","author_name":"Uploaded by {{ file["name"] }} | {{ app_info["name"] }}","author_url":"{{ domain }}"}</script>
 {% endblock %}
 {% block content %}
     <style>
