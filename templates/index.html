@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
-{#{% block header %}#}
-{#    #}
-{#{% endblock %}#}
+
 {% block content %}
     <h1>{{ app_info["name"] }}</h1>
+    <br>
     <p>{{ app_info["name"] }} - simple and lightweight file hosting.</p>
+    <p>Here you can upload your pretty uwu pictures and more!</p>
     <p>Max file size: {{ max_file_size }}</p>
     <p>More about uploading you can read <a href="{{ url_for("upload") }}">here</a>.</p>
+{#    <img src="{{ url_for("static", filename="woman.png") }}" class="back" alt="uwu">#}
 {% endblock %}

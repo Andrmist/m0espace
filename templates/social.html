@@ -5,20 +5,15 @@
     <meta property="og:description" content="" />
     <meta property="og:image" content="{{ domain + "/t/" + file["id"] + ".jpg" if file["mimetype"].split("/")[0] == 'video' else domain + "/i/" + file["id"] + file["ext"] }}"> <!-- include your hosted image full URL -->
     <meta property="og:url" content="{{ domain }}" />
-    <meta name="twitter:title" content="Uploaded by {{ file["name"] }} | {{ app_info["name"] }}">
-    <meta name="twitter:description" content="" />
-    <meta name="twitter:image" content="{{ domain + "/t/" + file["id"] + ".jpg" if file["mimetype"].split("/")[0] == 'video' else domain + "/i/" + file["id"] + file["ext"] }}" /> <!-- include your hosted image full URL -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="{{ app_info["color"] }}">
-    <script type="application/json+oembed">{"type":"link","version":"1.0","author_name":"Uploaded by {{ file["name"] }} | {{ app_info["name"] }}","author_url":"{{ domain }}"}</script>
+    <link type="application/json+oembed" href="{{ domain + url_for("social_files", path=file["id"] + ".json") }}"/>
 {% endblock %}
 {% block content %}
     <style>
         .embed {
             max-width: 100%;
-            {#display: block;#}
-            {#margin-right: auto;#}
-            {#margin-left: auto;#}
+            max-height: 70vh;
             display: flex;
             flex-direction: column;
         }
@@ -39,6 +34,7 @@
     </script>
     <p>Uploaded by {{ file["name"] }}</p>
     <p>MIME type: {{ file["mimetype"] }}</p>
+    <p>Size: {{ file["size"] }}</p>
     <p>Uploaded at <span class="date" id="uploaded"></span></p>
     <div class="embed">
         {% if file["mimetype"].split("/")[0] == "image" %}
@@ -57,6 +53,9 @@
             <pre><code id="embed"></code></pre>
             <br>
             <a href="/i/{{ file['id'] + file['ext'] }}">View raw</a>
+        {% else %}
+            <br>
+            <a href="/i/{{ file['id'] + file['ext'] }}">Download</a>
         {% endif %}
     </div>
 

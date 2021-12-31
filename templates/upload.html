@@ -71,8 +71,7 @@ social=[y/n] (Return link to OpenGraph [y] or file [n])
             <p>Your token is: <a class="spoiler" id="token" href="#token" onclick="copy('{{ user.token }}')" title="Click to reveal and copy">{{ user.token }}</a></p>
             <input type="hidden" name="token" value="{{ user.token }}">
         {% endif %}
-        <input type="hidden" name="social" value="y">
-        <input type="hidden" name="http" value="1">
+        <input type="hidden" name="redirect" value="1">
         <p>File: <input type="file" name="file"></p>
         <input type="submit">
     </form>

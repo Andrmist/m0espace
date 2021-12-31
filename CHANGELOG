@@ -1,0 +1,6 @@
+[2021-11-08] - Added 'social' field in POST form which returns link to file with OpenGraph
+[2021-11-08] - Replaced file['mime'] to file['mimetype'] in templates/social.html
+[2021-11-08] - Added OpenGraph tags for all pages, also added information about name
+[2021-11-08] - Added OpenGraph tags for social media
+[2021-11-08] - Fixed requirements.txt
+[2021-11-08] - Initial commit, added basic funtional
